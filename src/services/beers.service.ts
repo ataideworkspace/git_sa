@@ -8,7 +8,6 @@ class BeerService extends BaseService {
 
   public async getBeers(filter: string): Promise<Beer[]> {
     return await this.instance.get<Beer[]>(`/beers${filter}`).then((response) => {
-      console.log(response);
       return response;
     });
   }
