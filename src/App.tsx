@@ -1,5 +1,5 @@
 import './App.scss';
-import { BeerTable } from './components/table';
+import BeerTable from './components/BeerTable';
 
 function App() {
   return (

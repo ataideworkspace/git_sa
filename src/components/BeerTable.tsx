@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Beer from '../models/beers.model';
 import BeerService from '../services/beers.service';
 
-export const BeerTable = () => {
+const BeerTable = () => {
   const beerService = new BeerService();
   interface PageState {
     skip: number;
@@ -51,3 +51,5 @@ export const BeerTable = () => {
     </>
   );
 };
+
+export default BeerTable;

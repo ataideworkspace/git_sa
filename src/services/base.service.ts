@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axiosRetry from 'axios-retry';
 
 declare module 'axios' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -12,7 +13,7 @@ abstract class BaseService {
     this.instance = axios.create({
       baseURL
     });
-
+    axiosRetry(this.instance, { retries: 3 });
     this._initializeResponseInterceptor();
   }
 

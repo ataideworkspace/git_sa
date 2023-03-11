@@ -12,10 +12,6 @@ class BeerService extends BaseService {
       return response;
     });
   }
-
-  public async getBeer(id: string): Promise<Beer> {
-    return await this.instance.get<Beer>(`/beers/${id}`).then((response) => response.data);
-  }
 }
 
 export default BeerService;
