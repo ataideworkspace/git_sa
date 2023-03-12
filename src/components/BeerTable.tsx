@@ -1,8 +1,16 @@
-import { Grid, GridColumn, GridPageChangeEvent } from '@progress/kendo-react-grid';
+import { Grid, GridColumn as Column, GridPageChangeEvent } from '@progress/kendo-react-grid';
 import { useEffect, useState } from 'react';
+import { Switch, SwitchChangeEvent } from '@progress/kendo-react-inputs';
 import Beer from '../models/beers.model';
 import BeerService from '../services/beers.service';
-import { Switch, SwitchChangeEvent } from '@progress/kendo-react-inputs';
+
+const imgCell = (props: { dataItem: { image_url: string | undefined } }) => {
+  return (
+    <td style={{ textAlign: 'center' }}>
+      <img src={props.dataItem.image_url} style={{ width: 40, height: 120 }} />
+    </td>
+  );
+};
 
 const BeerTable = () => {
   const beerService = new BeerService();
@@ -17,10 +25,6 @@ const BeerTable = () => {
   const [filter, setFilter] = useState<string>('');
   const [checked, setChecked] = useState<boolean>(true);
 
-  const pageChange = (event: GridPageChangeEvent) => {
-    setPage(event.page);
-  };
-
   useEffect(() => {
     const getBeers = async () => {
       const getBeers = await beerService.getBeers(filter);
@@ -29,16 +33,33 @@ const BeerTable = () => {
     getBeers();
   }, [filter]);
 
+  const pageChange = (event: GridPageChangeEvent) => {
+    setPage(event.page);
+  };
+
   const handleChange = (event: SwitchChangeEvent) => {
-    const checked = event.target.value;
+    setChecked(event.target.value);
+
     checked ? setFilter('?abv_gt=8') : setFilter('');
+  };
+
+  const buttonCell = () => {
+    return (
+      <Switch
+        onChange={handleChange}
+        defaultChecked={checked}
+        className='switch'
+        onLabel={'< 8'}
+        offLabel={'ABV'}
+      />
+    );
   };
 
   return (
     <>
       {beers && (
-        <>
-          <Switch onChange={handleChange} defaultChecked={checked} />
+        <div className='tableBeers'>
+          <h1 className='grades'>Our Beer Grades</h1>
           <Grid
             style={{ height: '500px' }}
             data={beers.slice(page.skip, page.take + page.skip)}
@@ -47,12 +68,13 @@ const BeerTable = () => {
             total={beers.length}
             pageable={true}
             onPageChange={pageChange}>
-            <GridColumn field='name' title='Name'></GridColumn>
-            <GridColumn field='tagline' title='Line'></GridColumn>
-            <GridColumn field='description' title='Description'></GridColumn>
-            <GridColumn field='abv' title='ABV'></GridColumn>
+            <Column field='name' title='Name'></Column>
+            <Column field='tagline' title='Line'></Column>
+            <Column field='description' title='Description'></Column>
+            <Column field='image_url' cell={imgCell} title='Image'></Column>
+            <Column field='abv' title='ABV' headerCell={buttonCell}></Column>
           </Grid>
-        </>
+        </div>
       )}
     </>
   );

@@ -1,10 +1,10 @@
 import './App.scss';
-import BeerTable from './components/BeerTable';
-
+import './NavBar.scss';
+import Home from './components/Home';
 function App() {
   return (
     <div className='App'>
-      <BeerTable></BeerTable>
+      <Home></Home>
     </div>
   );
 }
